@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#102a43">
+<meta name="description" content="Personal work, attendance and payment tracker in Saudi Riyal.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Easy core cut all in one</title>
+<style>
+:root{--navy:#102a43;--blue:#176b87;--mint:#dff6ef;--bg:#f3f6f8;--card:#fff;--ink:#183247;--muted:#6b7d8b;--line:#e4ebef;--red:#b54747;--green:#16835d;--gold:#a76b16}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:linear-gradient(135deg,#102a43,#176b87);color:white;padding:24px 18px 20px;border-radius:0 0 24px 24px}
+.wrap{max-width:850px;margin:auto;padding:0 14px 40px}.brand{font-size:12px;letter-spacing:1.8px;opacity:.8;font-weight:700}.headrow{display:flex;justify-content:space-between;align-items:center;gap:10px}.appname{font-size:24px;font-weight:850;line-height:1.1;margin:8px 0}.subtitle{font-size:13px;opacity:.82}.currency{border:1px solid #ffffff55;border-radius:20px;padding:6px 10px;font-size:12px;font-weight:700}
+nav{display:flex;gap:7px;overflow:auto;padding:14px 0 12px;position:sticky;top:0;background:var(--bg);z-index:3}
+nav button{white-space:nowrap;border:1px solid var(--line);background:white;color:var(--muted);border-radius:20px;padding:9px 13px;font-weight:700}
+nav button.active{background:var(--navy);color:white;border-color:var(--navy)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat,.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px;box-shadow:0 3px 12px #102a4308}
+.stat small{display:block;color:var(--muted);font-weight:650}.stat strong{display:block;font-size:24px;margin-top:5px;letter-spacing:-.5px}.stat span{font-size:11px;color:var(--muted)}
+.green{color:var(--green)}.red{color:var(--red)}.gold{color:var(--gold)}
+.panel{margin-top:12px}.panel h2{font-size:17px;margin:0 0 12px}.muted{color:var(--muted);font-size:13px}
+label{display:block;font-size:13px;font-weight:700;margin:11px 0 5px}input,select,textarea{width:100%;padding:11px 12px;border:1px solid #d7e1e7;border-radius:10px;background:white;color:var(--ink);font:inherit;min-height:43px}input:focus,select:focus{outline:2px solid #9bd4e2;border-color:var(--blue)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.btn{border:0;background:var(--blue);color:white;border-radius:11px;padding:12px 15px;font-weight:800;font-size:14px;cursor:pointer}.btn.secondary{background:#eaf1f5;color:var(--navy)}.btn.danger{background:#fff0ef;color:var(--red)}.btn.full{width:100%;margin-top:14px}
+.list{display:flex;flex-direction:column;gap:8px;margin-top:12px}.item{border:1px solid var(--line);border-radius:13px;padding:12px;background:white}.itemtop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.item strong{font-size:14px}.tag{font-size:11px;font-weight:800;padding:4px 8px;border-radius:20px;background:#edf3f6;color:#526878}.tag.paid{background:#e2f5ed;color:#13744f}.tag.pending{background:#fff1dc;color:#98600d}.actions{display:flex;gap:7px;margin-top:9px}.actions button{padding:7px 10px;font-size:12px}
+.hidden{display:none!important}.notice{padding:11px 12px;border-radius:11px;background:#edf5f8;color:#36566a;font-size:12px;margin-top:10px}.empty{text-align:center;padding:22px;color:var(--muted);font-size:13px}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:20px 5px}
+@media(min-width:650px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.appname{font-size:29px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+ <div class="headrow"><div><div class="brand">PERSONAL WORK TRACKER</div><div class="appname">Easy core cut<br>all in one</div><div class="subtitle">Work · Attendance · Salary · Payment</div></div><div class="currency">SAR ر.س</div></div>
+</div></header>
+<main class="wrap">
+<nav aria-label="Main navigation">
+<button class="active" data-tab="home">Overview</button><button data-tab="work">Work & Payment</button><button data-tab="attendance">Attendance</button><button data-tab="reports">Reports</button><button data-tab="backup">Backup</button>
+</nav>
+<section id="home" class="tab">
+ <div class="grid">
+  <div class="stat"><small>Total earned</small><strong id="s-earned">0.00</strong><span>SAR</span></div>
+  <div class="stat"><small>Paid to you</small><strong class="green" id="s-paid">0.00</strong><span>SAR</span></div>
+  <div class="stat"><small>Pending payment</small><strong class="red" id="s-pending">0.00</strong><span>SAR</span></div>
+  <div class="stat"><small>Present days</small><strong id="s-present">0</strong><span>days recorded</span></div>
+ </div>
+ <div class="panel"><h2>Quick summary</h2><div class="row"><div><div class="muted">Absent days</div><strong id="s-absent">0</strong></div><div><div class="muted">Leave days</div><strong id="s-leave">0</strong></div></div><div class="notice">Your records are saved on this device. Use Backup to export a copy before changing or replacing your phone.</div></div>
+ <div class="panel"><h2>Recent work</h2><div id="recent-work" class="list"></div></div>
+</section>
+<section id="work" class="tab hidden">
+ <div class="panel"><h2>Add work & payment</h2>
+ <form id="work-form">
+  <label for="w-date">Date</label><input id="w-date" type="date" required>
+  <label for="w-desc">Work description</label><input id="w-desc" placeholder="e.g. Core cutting / marking work" required maxlength="100">
+  <div class="row"><div><label for="w-earned">Earned (SAR)</label><input id="w-earned" type="number" min="0" step=".01" placeholder="0.00" required></div><div><label for="w-paid">Payment received (SAR)</label><input id="w-paid" type="number" min="0" step=".01" value="0" required></div></div>
+  <div class="notice">Pending amount is calculated automatically. Payment received cannot be greater than earned for this entry.</div>
+  <button class="btn full" type="submit">＋ Save work entry</button>
+ </form></div>
+ <div class="panel"><h2>Work history</h2><div class="row"><div><label for="work-month">Filter month</label><input type="month" id="work-month"></div><div style="display:flex;align-items:end"><button class="btn secondary full" id="clear-work-filter" type="button">Show all</button></div></div><div id="work-list" class="list"></div></div>
+</section>
+<section id="attendance" class="tab hidden">
+ <div class="panel"><h2>Daily attendance</h2>
+ <form id="att-form">
+  <label for="a-date">Date</label><input id="a-date" type="date" required>
+  <label for="a-status">Attendance status</label><select id="a-status"><option>Present</option><option>Absent</option><option>Leave</option></select>
+  <label for="a-note">Note (optional)</label><input id="a-note" maxlength="100" placeholder="Shift, reason, etc.">
+  <button class="btn full" type="submit">＋ Save attendance</button>
+ </form><div class="notice">Only one attendance record is allowed per date. You can edit or delete an existing record.</div></div>
+ <div class="panel"><h2>Attendance history</h2><div class="row"><div><label for="att-month">Filter month</label><input type="month" id="att-month"></div><div style="display:flex;align-items:end"><button class="btn secondary full" id="clear-att-filter" type="button">Show all</button></div></div><div id="att-list" class="list"></div></div>
+</section>
+<section id="reports" class="tab hidden">
+ <div class="panel"><h2>Monthly report</h2><label for="report-month">Choose month</label><input type="month" id="report-month">
+ <div class="grid" style="margin-top:12px">
+  <div class="stat"><small>Earned</small><strong id="r-earned">0.00</strong><span>SAR</span></div>
+  <div class="stat"><small>Paid</small><strong class="green" id="r-paid">0.00</strong><span>SAR</span></div>
+  <div class="stat"><small>Pending</small><strong class="red" id="r-pending">0.00</strong><span>SAR</span></div>
+  <div class="stat"><small>Present</small><strong id="r-present">0</strong><span>days</span></div>
+  <div class="stat"><small>Absent</small><strong id="r-absent">0</strong><span>days</span></div>
+  <div class="stat"><small>Leave</small><strong id="r-leave">0</strong><span>days</span></div>
+ </div><button class="btn full" id="export-month" type="button">Export this month's report (CSV)</button></div>
+</section>
+<section id="backup" class="tab hidden">
+ <div class="panel"><h2>Backup & restore</h2><p class="muted">Download a backup file to keep your work, payment and attendance records safe. Restore a previous backup on this device if needed.</p><button class="btn full" id="backup-btn">Download backup (JSON)</button><label for="restore-file">Restore backup file</label><input id="restore-file" type="file" accept="application/json,.json"><div class="notice">Restoring replaces the records currently stored on this device. Export a backup first if you need to keep them.</div></div>
+ <div class="panel"><h2>Export all records</h2><button class="btn secondary full" id="export-all">Download all records (CSV)</button></div>
+</section>
+<footer>Easy core cut all in one · Personal use · Currency: Saudi Riyal (SAR)</footer>
+</main>
+<script>
+const KEY='easyCoreCutAllInOne_v1';
+const today=()=>new Date().toLocaleDateString('en-CA');
+const monthNow=()=>today().slice(0,7);
+let db={work:[],attendance:[]};
+try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved&&Array.isArray(saved.work)&&Array.isArray(saved.attendance))db=saved}catch(e){}
+const $=id=>document.getElementById(id);
+const money=n=>(Number(n)||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const save=()=>localStorage.setItem(KEY,JSON.stringify(db));
+const sum=(arr,k)=>arr.reduce((s,x)=>s+(Number(x[k])||0),0);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function totals(work=db.work){const earned=sum(work,'earned'),paid=sum(work,'paid');return{earned,paid,pending:earned-paid}}
+function byMonth(items,m){return m?items.filter(x=>x.date.startsWith(m)):items}
+function render(){
+ const t=totals();$('s-earned').textContent=money(t.earned);$('s-paid').textContent=money(t.paid);$('s-pending').textContent=money(t.pending);
+ for(const st of ['Present','Absent','Leave']){$('s-'+st.toLowerCase()).textContent=db.attendance.filter(x=>x.status===st).length}
+ const recent=db.work.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5);
+ $('recent-work').innerHTML=recent.length?recent.map(w=>workCard(w,false)).join(''):'<div class="empty">No work entries yet. Add your first work entry.</div>';
+ const wm=$('work-month').value;const wl=byMonth(db.work,wm).slice().sort((a,b)=>b.date.localeCompare(a.date));
+ $('work-list').innerHTML=wl.length?wl.map(w=>workCard(w,true)).join(''):'<div class="empty">No work entries for this period.</div>';
+ const am=$('att-month').value;const al=byMonth(db.attendance,am).slice().sort((a,b)=>b.date.localeCompare(a.date));
+ $('att-list').innerHTML=al.length?al.map(a=>attCard(a)).join(''):'<div class="empty">No attendance records for this period.</div>';
+ report();
+}
+function workCard(w,actions){const pending=Number(w.earned)-Number(w.paid);return `<div class="item"><div class="itemtop"><div><strong>${esc(w.description)}</strong><div class="muted">${esc(w.date)}</div></div><span class="tag ${pending<=0?'paid':'pending'}">${pending<=0?'PAID':'PENDING'}</span></div><div class="muted" style="margin-top:8px">Earned <b>${money(w.earned)} SAR</b> · Paid <b class="green">${money(w.paid)} SAR</b> · Pending <b class="red">${money(pending)} SAR</b></div>${actions?`<div class="actions"><button class="btn secondary" onclick="editWork('${w.id}')">Edit</button><button class="btn danger" onclick="deleteWork('${w.id}')">Delete</button></div>`:''}</div>`}
+function attCard(a){return `<div class="item"><div class="itemtop"><div><strong>${esc(a.date)}</strong><div class="muted">${esc(a.note||'No note')}</div></div><span class="tag ${a.status==='Present'?'paid':a.status==='Absent'?'pending':''}">${esc(a.status.toUpperCase())}</span></div><div class="actions"><button class="btn secondary" onclick="editAtt('${a.id}')">Edit</button><button class="btn danger" onclick="deleteAtt('${a.id}')">Delete</button></div></div>`}
+function report(){const m=$('report-month').value||monthNow(),w=byMonth(db.work,m),a=byMonth(db.attendance,m),t=totals(w);$('r-earned').textContent=money(t.earned);$('r-paid').textContent=money(t.paid);$('r-pending').textContent=money(t.pending);for(const s of ['Present','Absent','Leave'])$('r-'+s.toLowerCase()).textContent=a.filter(x=>x.status===s).length}
+function editWork(id){const w=db.work.find(x=>x.id===id);if(!w)return;const d=prompt('Work description',w.description);if(d===null)return;const e=prompt('Total earned (SAR)',w.earned);if(e===null)return;const p=prompt('Payment received (SAR)',w.paid);if(p===null)return;const en=Number(e),pa=Number(p);if(!d.trim()||!Number.isFinite(en)||!Number.isFinite(pa)||en<0||pa<0||pa>en){alert('Please enter valid amounts. Paid cannot exceed earned.');return}w.description=d.trim();w.earned=en;w.paid=pa;save();render()}
+function deleteWork(id){if(confirm('Delete this work entry?')){db.work=db.work.filter(x=>x.id!==id);save();render()}}
+function editAtt(id){const a=db.attendance.find(x=>x.id===id);if(!a)return;const s=prompt('Enter Present, Absent or Leave',a.status);if(s===null)return;const v=s.trim().toLowerCase();if(!['present','absent','leave'].includes(v)){alert('Invalid status');return}a.status=v[0].toUpperCase()+v.slice(1);const n=prompt('Note',a.note||'');if(n!==null)a.note=n;save();render()}
+function deleteAtt(id){if(confirm('Delete this attendance record?')){db.attendance=db.attendance.filter(x=>x.id!==id);save();render()}}
+$('w-date').value=today();$('a-date').value=today();$('work-month').value=monthNow();$('att-month').value=monthNow();$('report-month').value=monthNow();
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('hidden',x.id!==b.dataset.tab));if(b.dataset.tab==='reports')report()}));
+$('work-form').addEventListener('submit',e=>{e.preventDefault();const earned=Number($('w-earned').value),paid=Number($('w-paid').value);if(!Number.isFinite(earned)||!Number.isFinite(paid)||earned<0||paid<0||paid>earned){alert('Paid amount must be between 0 and earned amount.');return}db.work.push({id:crypto.randomUUID(),date:$('w-date').value,description:$('w-desc').value.trim(),earned,paid});save();e.target.reset();$('w-date').value=today();$('w-paid').value='0';render();alert('Work entry saved.')});
+$('att-form').addEventListener('submit',e=>{e.preventDefault();const date=$('a-date').value;if(db.attendance.some(a=>a.date===date)){alert('Attendance already exists for this date. Edit the existing record instead.');return}db.attendance.push({id:crypto.randomUUID(),date,status:$('a-status').value,note:$('a-note').value.trim()});save();$('a-note').value='';render();alert('Attendance saved.')});
+$('work-month').addEventListener('change',render);$('att-month').addEventListener('change',render);$('report-month').addEventListener('change',report);
+$('clear-work-filter').onclick=()=>{$('work-month').value='';render()};$('clear-att-filter').onclick=()=>{$('att-month').value='';render()};
+function download(name,content,type){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url)}
+$('backup-btn').onclick=()=>download('easy-core-cut-backup-'+today()+'.json',JSON.stringify(db,null,2),'application/json');
+$('restore-file').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(!Array.isArray(data.work)||!Array.isArray(data.attendance))throw Error();if(confirm('Replace all current records with this backup?')){db=data;save();render();alert('Backup restored.')}}catch(err){alert('This backup file is not valid.')}e.target.value=''});
+function csv(rows){return rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\n')}
+$('export-month').onclick=()=>{const m=$('report-month').value||monthNow(),w=byMonth(db.work,m),a=byMonth(db.attendance,m);let lines=[['Type','Date','Description / Status','Earned SAR','Paid SAR','Pending SAR','Note']];w.forEach(x=>lines.push(['Work',x.date,x.description,x.earned,x.paid,x.earned-x.paid,'']));a.forEach(x=>lines.push(['Attendance',x.date,x.status,'','','',x.note]));download('easy-core-cut-'+m+'.csv','\ufeff'+csv(lines),'text/csv;charset=utf-8')};
+$('export-all').onclick=()=>{let lines=[['Type','Date','Description / Status','Earned SAR','Paid SAR','Pending SAR','Note']];db.work.forEach(x=>lines.push(['Work',x.date,x.description,x.earned,x.paid,x.earned-x.paid,'']));db.attendance.forEach(x=>lines.push(['Attendance',x.date,x.status,'','','',x.note]));download('easy-core-cut-all-records.csv','\ufeff'+csv(lines),'text/csv;charset=utf-8')};
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+render();
+</script>
+</body></html>
